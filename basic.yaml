@@ -64,6 +64,7 @@ resources:
         - {get_attr: [server_scaleup_policy, alarm_url]}
       matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: gt
+
   cpu_alarm_low:
     type: OS::Ceilometer::Alarm
     properties:
@@ -77,3 +78,17 @@ resources:
         - {get_attr: [server_scaledown_policy, alarm_url]}
       matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: lt
+
+outputs:
+  scale_up_url:
+    description: >
+      This URL is the webhook to scale up the group.  You can invoke
+      the scale-up operation by doing an HTTP POST to this URL; no
+      body nor extra headers are needed.
+    value: {get_attr: [server_scaleup_policy, alarm_url]}
+  scale_dn_url:
+    description: >
+      This URL is the webhook to scale down the group.  You can invoke
+      the scale-down operation by doing an HTTP POST to this URL; no
+      body nor extra headers are needed.
+    value: {get_attr: [server_scaledown_policy, alarm_url]}
